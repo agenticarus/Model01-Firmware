@@ -16,6 +16,9 @@
 // The Kaleidoscope core
 #include "Kaleidoscope.h"
 
+// Support for communication over the serial port
+#include "Kaleidoscope-Focus.h"
+
 // Support for keys that move the mouse
 #include "Kaleidoscope-MouseKeys.h"
 
@@ -323,6 +326,8 @@ KALEIDOSCOPE_INIT_PLUGINS(
   // The hardware test mode, which can be invoked by tapping Prog, LED and the left Fn button at the same time.
   TestMode,
 
+  Focus,
+
   // LEDControl provides support for other LED modes
   LEDControl,
 
@@ -385,6 +390,8 @@ KALEIDOSCOPE_INIT_PLUGINS(
  * Kaleidoscope and any plugins.
  */
 void setup() {
+  Serial.begin(9600);
+  
   // First, call Kaleidoscope's internal setup function
   Kaleidoscope.setup();
 
@@ -409,6 +416,10 @@ void setup() {
   // This avoids over-taxing devices that don't have a lot of power to share
   // with USB devices
   LEDOff.activate();
+
+  Focus.addHook (FOCUS_HOOK_LEDCONTROL);
+  Focus.addHook (FOCUS_HOOK_HELP);
+  Focus.addHook (FOCUS_HOOK_VERSION);
 }
 
 /** loop is the second of the standard Arduino sketch functions.
